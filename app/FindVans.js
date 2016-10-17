@@ -53,24 +53,14 @@ class FindVans{
 
 			console.log('newDocument : ' + JSON.stringify(newDocument.title,null,4));
 
-			es.indexNewDocument(newDocument,function(){
-
-				if (self.results.length === self.urls.length){
-					
-					self.cleanUp(callback);
-				}							
-			});
 		}else{
 			console.log('newDocument is null');
 			self.errorArray.push({
 				error:'newDocument is null',
 				message:'could not parse page',
 				url:ithUrl
-			})
+			});
 		}	
-
-		console.log("self.results.length : " + self.results.length);
-		console.log("self.errorArray.lengh : " + self.errorArray.length);
 
 		callback();
 	}	
@@ -92,16 +82,24 @@ class FindVans{
 			crawl.getPostPageData(self.baseUrl + urls[self.index] ,function(newDocument, error){
 
 				self.handleNewPostDocument(newDocument, error, function(){
-					
-					if(self.index == self.urls.length-1){
-						callback();
-					}else{
-						self.index += 1;
-						getNext();						
-					}
 
+					es.indexNewDocument(newDocument,function(){
 
+						if (self.results.length == 200/*self.urls.length*/){
 
+							console.log("self.results.length : " + self.results.length);
+							console.log("self.errorArray.lengh : " + self.errorArray.length);
+							self.results = [];
+							self.errorArray = [];
+							self.index = 0;
+							callback();
+						
+						}else{
+						
+							self.index += 1;
+							getNext();
+						}
+					});
 				});
 			});	
 		}
@@ -118,10 +116,10 @@ class FindVans{
 			  		throw new Error(error);
 			  	}
 
-				callback({
+				callback(/*{
 					indicesResponse:indicesResp,
 					results: results
-				});
+				}*/);
 			})
 		});
 	}

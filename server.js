@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
+var path = require('path');
 var morgan = require('morgan');
 var Crawler = require('./app/Crawler.js');
 var UrlManager = require('./app/UrlManager.js');
@@ -9,7 +10,7 @@ var ElasticSearchInterface = require('./app/ElasticSearchInterface.js');
 
 var FindVans = require('./app/FindVans.js');
 
-
+var esi = new ElasticSearchInterface();
 
 app.use(morgan('dev')); // log requests to the console
 
@@ -27,6 +28,11 @@ router.use(function(req, res, next) {
 router.get('/', function(req, res) {
 	res.json({ message: 'you have been routed to the root route. they are coming to get you!' });	
 });
+//------------------------------------------------------------
+app.get('/van-search', function(req, res) {
+    res.sendfile(path.join(__dirname + '/'+ 'van-search' +'.html'));
+});
+
 //------------------------------------------------------------
 router.get('/crawl', function(req, res) {
 
@@ -70,14 +76,27 @@ router.get('/get-vanposts', function(req, res){
 	})
 });
 //------------------------------------------------------------
+
+router.get('/init-vanposts-index', function(req, res){
+
+	esi.initIndex(function(indexInfoResponse){
+		console.log(JSON.stringify(indexInfoResponse,null,4));
+		console.log('initialised the vans index');
+		res.json({
+			note : 'initialized the vans index',	
+			message: indexInfoResponse
+		});
+	})
+});
 app.use('/', router);
 app.listen(port);
 console.log('Magic happens on port ' + port);
 
 
-var esi = new ElasticSearchInterface();
-esi.initIndex(function(indexInfoResponse){
-	console.log(JSON.stringify(indexInfoResponse,null,4));
-	console.log('initialised the vans index');
-})
+//------------------------------------------------------------
+
+// esi.initIndex(function(indexInfoResponse){
+// 	console.log(JSON.stringify(indexInfoResponse,null,4));
+// 	console.log('initialised the vans index');
+// })
 
