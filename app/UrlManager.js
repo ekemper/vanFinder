@@ -24,7 +24,7 @@ class UrlManager{
 		*/
 		var self = this;
 
-		var url = 'https://phoenix.craigslist.org/search/cta?&query=van';
+		var url = 'https://sfbay.craigslist.org/search/cta?&query=van';
 
 		crawl.getSearchResultsCount(url , function(searchResultsCount){
 

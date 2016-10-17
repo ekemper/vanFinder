@@ -50,7 +50,21 @@ class Crawler{
 	           	 callback(null, error);
 	        }
 
-	        var $ = cheerio.load(html);
+	        console.log('response.statusCode : ' + response.statusCode);
+
+	        try{
+
+		        var $ = cheerio.load(html);
+		        //if(typeof $ !== 'function'){
+		        	//throw new Error('typeof $ !== function')
+		        	//console.warn('error loading html')
+		        //}
+
+	        }catch(error){
+	        	console.warn(error);
+	        	var newDocument = null;
+	        	callback(newDocument);
+	        }
 
 		    var newDocument = {
 		    	url: url,
@@ -77,11 +91,39 @@ class Crawler{
 		        }
 		    })
 
-		    console.log('newDocument : ' + JSON.stringify(newDocument.title,null,4));
+		    //newDocument = self.stopWordFilter(newDocument); 
 
-	    	callback(newDocument);
+		    callback(newDocument);
+		    
 	    })
 	} 
+
+	// stopWordFilter(newDocument){
+
+	// 	var result = newDocument;
+
+	// 	var stopWords = [
+	// 		'toyota',
+	// 		'nissan',
+	// 		'kia',
+	// 		'chrysler',
+	// 		'buick',
+	// 		'suzuki',
+	// 		'honda',
+	// 		'minivan',
+	// 		'mazda',
+	// 		'eurovan',
+	// 		'volkswagon',
+	// 		'windstar',
+	// 		'mini',
+	// 		'chateau'
+	// 	];
+	
+
+
+	// 	return result;
+	// }
+
 
 	getPostIdFromUrl(postUrl){
 

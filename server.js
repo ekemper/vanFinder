@@ -16,7 +16,7 @@ app.use(morgan('dev')); // log requests to the console
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var port = process.env.PORT || 8080; 
+var port = process.env.PORT || 2222; 
 
 var router = express.Router();
 
@@ -60,7 +60,7 @@ router.get('/get-vanposts', function(req, res){
 
 	var findVans = new FindVans();
 
-	findVans.getVanPosts(function(response){
+	findVans.getVanPostsUrls(function(response){
 
 		res.json({
 			note : ' this is a  test : finding and indexing van posts!!',	

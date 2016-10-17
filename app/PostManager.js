@@ -8,7 +8,7 @@ class PostManager {
 	constructor(){
 	}
 
-	getPostsFromUrlSet(callback){
+	getPostUrlsFromUrlSet(callback){
 
 		urlMan.getSearchResultUrlSet(function(){
 
